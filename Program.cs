@@ -1,14 +1,22 @@
 ﻿using ChatBotTelegram;
 using ChatBotTelegram.Bot;
+using ChatBotTelegram.DataBase;
+
+
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 
 
 
+
+
 apiKey my_api = new apiKey();
 Dicionario_Bot bot_dicionario = new Dicionario_Bot();
+var db = new Config("database/banco.db");
 
+
+/*
 using var cts = new CancellationTokenSource();
 var bot = new TelegramBotClient(my_api.getBotApiKey(), cancellationToken: cts.Token);
 var me = await bot.GetMe();
@@ -39,6 +47,6 @@ async Task OnMessage(Message msg, UpdateType type)
 Console.WriteLine($"@{me.Username} is running... Press Enter to terminate");
 Console.ReadLine();
 cts.Cancel(); // stop the bot
-
+*/
 
 

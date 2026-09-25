@@ -1,12 +1,14 @@
 {
   "version": 2,
-  "dgSpecHash": "DLNcc53X+sU=",
+  "dgSpecHash": "0Xhm2w5NVew=",
   "success": true,
   "projectFilePath": "/home/ratralta/Área de trabalho/TCC faculdade/ChatBotTelegram/ChatBotTelegram.csproj",
   "expectedPackageFiles": [
     "/home/ratralta/.nuget/packages/microsoft.extensions.dependencyinjection.abstractions/8.0.0/microsoft.extensions.dependencyinjection.abstractions.8.0.0.nupkg.sha512",
     "/home/ratralta/.nuget/packages/microsoft.extensions.options/8.0.0/microsoft.extensions.options.8.0.0.nupkg.sha512",
     "/home/ratralta/.nuget/packages/microsoft.extensions.primitives/8.0.0/microsoft.extensions.primitives.8.0.0.nupkg.sha512",
+    "/home/ratralta/.nuget/packages/stub.system.data.sqlite.core.netstandard/1.0.119/stub.system.data.sqlite.core.netstandard.1.0.119.nupkg.sha512",
+    "/home/ratralta/.nuget/packages/system.data.sqlite.core/1.0.119/system.data.sqlite.core.1.0.119.nupkg.sha512",
     "/home/ratralta/.nuget/packages/telegram.bot/22.10.3.2-dev.4/telegram.bot.22.10.3.2-dev.4.nupkg.sha512"
   ],
   "logs": []

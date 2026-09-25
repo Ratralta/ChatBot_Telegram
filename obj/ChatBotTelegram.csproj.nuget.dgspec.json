@@ -45,6 +45,10 @@
         "net10.0": {
           "targetAlias": "net10.0",
           "dependencies": {
+            "System.Data.SQLite.Core": {
+              "target": "Package",
+              "version": "[1.0.119, )"
+            },
             "Telegram.Bot": {
               "target": "Package",
               "version": "[22.10.3.2-dev.4, )"
