@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ChatBotTelegram")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+eef3d8d1a991d40c57c1909140ce8e1807b4c218")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9e0ef787d183134e054176982cb4b73c95d06d0b")]
 [assembly: System.Reflection.AssemblyProductAttribute("ChatBotTelegram")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ChatBotTelegram")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

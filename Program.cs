@@ -1,6 +1,6 @@
 ﻿using ChatBotTelegram;
 using ChatBotTelegram.Bot;
-using ChatBotTelegram.DataBase;
+using ChatBotTelegram.database;
 
 
 using Telegram.Bot;
@@ -15,6 +15,7 @@ apiKey my_api = new apiKey();
 Dicionario_Bot bot_dicionario = new Dicionario_Bot();
 var db = new Config("database/banco.db");
 
+db.printTable(0,[0,1]);
 
 /*
 using var cts = new CancellationTokenSource();
