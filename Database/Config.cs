@@ -9,7 +9,8 @@ public class Config
 public SQLiteConnection? conn {get;set;}
 private Dictionary<String,String[]> _tables_dicionario = new Dictionary<string, String[]> // dicionario de tabelas presentes no DB
 {
-    {"sabores",["id","sabor"]}
+    {"sabores",["id","sabor"]},
+    {"bebidas",["id","nome","preco"]}
 }; 
 
     public Config(String data_base_localizacao)

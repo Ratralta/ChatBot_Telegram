@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "0Xhm2w5NVew=",
+  "dgSpecHash": "Gw2LO0IiiCQ=",
   "success": true,
-  "projectFilePath": "/home/ratralta/Área de trabalho/TCC faculdade/ChatBotTelegram/ChatBotTelegram.csproj",
+  "projectFilePath": "/home/ratralta/Documentos/PROGRAMAÇÃO/TCC faculdade/ChatBotTelegram/ChatBotTelegram.csproj",
   "expectedPackageFiles": [
     "/home/ratralta/.nuget/packages/microsoft.extensions.dependencyinjection.abstractions/8.0.0/microsoft.extensions.dependencyinjection.abstractions.8.0.0.nupkg.sha512",
     "/home/ratralta/.nuget/packages/microsoft.extensions.options/8.0.0/microsoft.extensions.options.8.0.0.nupkg.sha512",

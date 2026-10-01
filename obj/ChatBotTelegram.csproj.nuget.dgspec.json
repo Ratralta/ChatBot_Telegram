@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/home/ratralta/Área de trabalho/TCC faculdade/ChatBotTelegram/ChatBotTelegram.csproj": {}
+    "/home/ratralta/Documentos/PROGRAMAÇÃO/TCC faculdade/ChatBotTelegram/ChatBotTelegram.csproj": {}
   },
   "projects": {
-    "/home/ratralta/Área de trabalho/TCC faculdade/ChatBotTelegram/ChatBotTelegram.csproj": {
+    "/home/ratralta/Documentos/PROGRAMAÇÃO/TCC faculdade/ChatBotTelegram/ChatBotTelegram.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/ratralta/Área de trabalho/TCC faculdade/ChatBotTelegram/ChatBotTelegram.csproj",
+        "projectUniqueName": "/home/ratralta/Documentos/PROGRAMAÇÃO/TCC faculdade/ChatBotTelegram/ChatBotTelegram.csproj",
         "projectName": "ChatBotTelegram",
-        "projectPath": "/home/ratralta/Área de trabalho/TCC faculdade/ChatBotTelegram/ChatBotTelegram.csproj",
+        "projectPath": "/home/ratralta/Documentos/PROGRAMAÇÃO/TCC faculdade/ChatBotTelegram/ChatBotTelegram.csproj",
         "packagesPath": "/home/ratralta/.nuget/packages/",
-        "outputPath": "/home/ratralta/Área de trabalho/TCC faculdade/ChatBotTelegram/obj/",
+        "outputPath": "/home/ratralta/Documentos/PROGRAMAÇÃO/TCC faculdade/ChatBotTelegram/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/ratralta/.nuget/NuGet/NuGet.Config"
