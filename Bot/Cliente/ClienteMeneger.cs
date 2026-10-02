@@ -1,4 +1,5 @@
 using System;
+using ChatBotTelegram.Bot.Dicionario.Pedidos;
 using Telegram.Bot.Types;
 
 namespace ChatBotTelegram.Bot.Cliente;
@@ -6,7 +7,6 @@ namespace ChatBotTelegram.Bot.Cliente;
 public class ClienteMeneger
 {
     public List<Cliente> clientes = new List<Cliente>();
-
     public Cliente newCliente(ChatId chatId)
     {
     var cliente = new Cliente(chatId);

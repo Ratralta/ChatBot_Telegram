@@ -6,6 +6,8 @@ using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 
+using ChatBotTelegram.Bot.Dicionario.Pedidos;
+
 namespace ChatBotTelegram.Bot;
 
 public class BotFunctions
@@ -42,13 +44,28 @@ public class BotFunctions
     public async Task PeguntarItemPedidoAsync(Message msg,ChatId chatId)
     {
     clienteMeneger.getClienteByChatId(chatId).estado_do_pedido = Cliente.Cliente.estadoPedidoEnum.escolhendo_item; // mudando estado do pedido
-    await bot.SendMessage(msg.Chat, "O que deseja pedir?",replyMarkup: new InlineKeyboardMarkup("pizza","bebida"));
+    var botoes = new InlineKeyboardMarkup("pizza","bebida");
+    var teste = await bot.SendMessage(msg.Chat, "O que deseja pedir?",replyMarkup: botoes);
     }
 
     public async Task PerguntarSaboresPizzaAsync(Message msg,ChatId chatId,String[] sabores_array)
     {
     clienteMeneger.getClienteByChatId(chatId).estado_do_pedido = Cliente.Cliente.estadoPedidoEnum.em_pizza_item; // mudando estado do pedido
-    InlineKeyboardButton[] botao = sabores_array.Select(c => InlineKeyboardButton.WithCallbackData(c)).ToArray(); // transformando "botao_opcoes" em algo pra ser lido em "SendMessage"
-    await bot.SendMessage(msg.Chat, "Qual sabor deseja na pizza? (Escollha 2 no maximo)",replyMarkup: new InlineKeyboardMarkup(botao));
+    InlineKeyboardButton[] botao_itens = sabores_array.Select(c => InlineKeyboardButton.WithCallbackData(c)).ToArray(); // transformando "botao_opcoes" em algo pra ser lido em "SendMessage"
+    InlineKeyboardMarkup botao = new InlineKeyboardMarkup(botao_itens);
+        
+        await bot.SendMessage(msg.Chat, "Qual sabor deseja na pizza? (Escollha 2 no maximo)",replyMarkup: botao);     
+    }
+
+    public async Task PrintarTodosPedidos()
+    {
+        foreach(var i_cliente in clienteMeneger.clientes)
+        {
+        Console.WriteLine("Cliente : " + i_cliente.chat_id);
+            foreach(var i_pedido in i_cliente.pedido.pedidos_list)
+            {
+            Console.WriteLine("Pedido : " + i_pedido);
+            }
+        }
     }
 }

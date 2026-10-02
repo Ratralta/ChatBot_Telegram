@@ -19,11 +19,14 @@ public class Cliente
 
     public bool atendimento_finalizado; 
     public ChatId chat_id; 
-    public Pedido pedido_itens;
+    public Pedido pedido;
     public estadoPedidoEnum estado_do_pedido; 
 
     public Cliente(ChatId chat_id)
     {
     this.chat_id = chat_id;
+    this.pedido = new Pedido();
     }
+
+
 }
