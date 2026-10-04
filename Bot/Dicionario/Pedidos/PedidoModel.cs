@@ -5,13 +5,17 @@ namespace ChatBotTelegram.Bot.Dicionario.Pedidos;
 public class PedidoModel
 {
     public String[] values;
+    public String pedido_name;
+    public double preco = 0; 
+    public bool pedido_finalizado = false;
+    public int i_value = 0;
 
-    /*
-    public PedidoModel(int values_size) // definindo tamanho de "values"
+    public PedidoModel(int size_values,String pedido_name) // definindo tamanho de "values"
     {
-    this.values = new String[values_size];
+    this.values = new String[size_values];
+    this.pedido_name = pedido_name;
     }
-    */
+    
 
     public String retornarArrayAsString<T>(T[] array)
     {

@@ -3,6 +3,7 @@ using System.Text.Encodings.Web;
 using ChatBotTelegram;
 using ChatBotTelegram.Bot;
 using ChatBotTelegram.Bot.Cliente;
+using ChatBotTelegram.Bot.Database;
 using ChatBotTelegram.Bot.Dicionario;
 using ChatBotTelegram.Bot.Dicionario.Pedidos;
 using ChatBotTelegram.Database;
@@ -17,12 +18,13 @@ apiKey my_api = new apiKey(); // dados de api
 
 
 var db = new Config("Database/banco.db"); // conectando com o banco de dados 
-String[] db_sabores = db.getSpecificTupla("sabores","sabor"); // pegando tupla "sabor" e retornando como "string[]"
+
+PizzaDB pizzaDB = new PizzaDB(db.getSpecificTupla("sabores","sabor"),Array.ConvertAll(db.getSpecificTupla("sabores","preco"),double.Parse));
+BebidaDB bebidaDB = new BebidaDB(db.getSpecificTupla("bebidas","nome"),Array.ConvertAll(db.getSpecificTupla("bebidas","preco"),double.Parse));
 
 
-
-ClienteMeneger clienteMeneger = new ClienteMeneger();
-var bot_dicionario = new Dicionario_Bot(db_sabores);
+ClienteMeneger clienteMeneger = new ClienteMeneger(pizzaDB,bebidaDB);
+var bot_dicionario = new Dicionario_Bot(pizzaDB.sabores);
 using var cts = new CancellationTokenSource();
 var bot = new TelegramBotClient(my_api.getBotToken(), cancellationToken: cts.Token);
 var me = await bot.GetMe();
@@ -45,8 +47,8 @@ async Task OnError(Exception exception, HandleErrorSource source)
 // method that handle messages received by the bot:
 async Task OnMessage(Message msg, UpdateType type)
 {
-    if(msg.Text == "print") {await botFunctions.PrintarTodosPedidos();}
-    await botFunctions.AskStartPedidoAsync(msg,db_sabores);
+    if(msg.Text == "print") {botFunctions.PrintarTodosPedidos();}
+    await botFunctions.AskStartPedidoAsync(msg,clienteMeneger.DBpizza.sabores);
 }
 
 // method that handle other types of updates received by the bot:
@@ -65,6 +67,10 @@ async Task OnUpdate(Update update)
             return;           
             }
         }
+        if(query.Data == "não")
+        {
+            await bot.SendMessage(query_chat_id,"Ok");
+        }
         if(botFunctions.clienteMeneger.hasThisChatId(query_chat_id)) // se existir esse cliente 
         {            
             Cliente cliente = clienteMeneger.getClienteByChatId(query_chat_id); // cliente especifico.
@@ -72,46 +78,31 @@ async Task OnUpdate(Update update)
             {
                 if(cliente.estado_do_pedido == Cliente.estadoPedidoEnum.escolhendo_item)
                 {
-                cliente.pedido.AddPedido(new PedidoPizza());
-                await botFunctions.PerguntarSaboresPizzaAsync(query.Message,query_chat_id,db_sabores);
+                cliente.pedido.AddPedido(new PedidoPizza(2,"Pizza"));
+                await botFunctions.PerguntarSaboresPizzaAsync(query.Message,query_chat_id);
                 return;            
                 }
             }
-            foreach(String i_sabor in db_sabores)
+            if(query.Data == "bebida")
             {
-                if(query.Data == i_sabor) // botão apertado de sabor de pizza 
+                if(cliente.estado_do_pedido == Cliente.estadoPedidoEnum.escolhendo_item)
                 {
-                    foreach(PedidoPizza i_pizza in cliente.pedido.pedidos_list) // vendo todos os pedidos por pizza 
-                    {
-                        if(!i_pizza.pedido_finalizado) // se "pedido_finalizado" for FALSE 
-                        {
-                            if(i_pizza.sabor_i < i_pizza.sabor.Length)
-                            {
-                            i_pizza.sabor[i_pizza.sabor_i] = query.Data;
-                            i_pizza.sabor_i += 1;
-                            if(i_pizza.sabor_i < i_pizza.sabor.Length) 
-                            {await botFunctions.PerguntarSaboresPizzaAsync(query.Message,query_chat_id,db_sabores);} 
-                            }
-                            if(i_pizza.sabor_i >= i_pizza.sabor.Length)
-                            {
-                            await bot.SendMessage(query_chat_id,"Sua pizza de sabor " + i_pizza.retornarArrayAsString<String>(i_pizza.sabor));
-                            i_pizza.pedido_finalizado = true; // encerrando esse pedido de pizza 
-                            await botFunctions.PeguntarItemPedidoAsync(query.Message,query_chat_id);
-                            }
-                        }
-                    }
+                cliente.pedido.AddPedido(new PedidoBebida(1,"Bebida"));
+                await botFunctions.PerguntarBebidasBebidaAsync(query.Message,query_chat_id);
+                return;            
                 }
             }
-        }
-        /*
-        foreach(String i_sabor in db_sabores)
-        {
-            if(query.Data == i_sabor)
+            botFunctions.CheckItemPedido(query,cliente);
+            if(query.Data == "Amostrar meus pedidos")
             {
-               
+                await bot.SendMessage(query_chat_id,clienteMeneger.getClientePedidos(query_chat_id));
+                await botFunctions.PeguntarItemPedidoAsync(query.Message,query_chat_id);
+            }
+            if(query.Data == "Prosseguir")
+            {
+            
             }
         }
-        */
         //await bot.AnswerCallbackQuery(query.Id, $"You picked {query.Data} from {query.Id}"); // pop up na tela 
         //await bot.SendMessage(query.Message!.Chat, $"User {query.Id} clicked on {query.Data}");
     }

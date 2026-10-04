@@ -13,11 +13,9 @@ public class Pedido
     }
 
     public List<PedidoModel> pedidos_list = new List<PedidoModel>();
-
-
     public int preco;
     public String? endereco;
-    public enum_tipo_de_pagamentos modo_de_pagamento; 
+    public enum_tipo_de_pagamentos modo_de_pagamento;
 
 
     public void AddPedido(PedidoModel pedido)

@@ -1,5 +1,8 @@
 using System;
+using System.Security.Cryptography.X509Certificates;
+using ChatBotTelegram.Bot.Database;
 using ChatBotTelegram.Bot.Dicionario.Pedidos;
+using ChatBotTelegram.Database;
 using Telegram.Bot.Types;
 
 namespace ChatBotTelegram.Bot.Cliente;
@@ -7,6 +10,15 @@ namespace ChatBotTelegram.Bot.Cliente;
 public class ClienteMeneger
 {
     public List<Cliente> clientes = new List<Cliente>();
+    public PizzaDB DBpizza; 
+    public BebidaDB DBbebida;
+
+    public ClienteMeneger(PizzaDB DBpizza,BebidaDB DBbebida)
+    {
+    this.DBpizza = DBpizza;
+    this.DBbebida = DBbebida;
+    }
+
     public Cliente newCliente(ChatId chatId)
     {
     var cliente = new Cliente(chatId);
@@ -31,5 +43,17 @@ public class ClienteMeneger
             }
         }
     return null;
+    }
+
+    public String getClientePedidos(ChatId chatId)
+    {
+    String retorno = "";
+
+        foreach(PedidoModel i_pedido in getClienteByChatId(chatId).pedido.pedidos_list)
+        {
+        retorno += i_pedido.pedido_name +" : "+ i_pedido.retornarArrayAsString(i_pedido.values) + ", Preço : R$" + i_pedido.preco + "\n";
+        }
+
+    return retorno;
     }
 }
