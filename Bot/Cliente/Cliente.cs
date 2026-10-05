@@ -12,12 +12,16 @@ public class Cliente
         escolhendo_item,
         em_pizza_item,
         em_bebida_item,
-        perguntando_se_deseja_iniciar_pedido
+        perguntando_se_deseja_iniciar_pedido,
+        pergutando_se_delivery,
+        definindo_endereco_delivery,
+        definindo_metodo_de_pagamento,
+        pedido_finalizado
     }
 
 
 
-    public bool atendimento_finalizado; 
+    public bool atendimento_finalizado;
     public ChatId chat_id; 
     public Pedido pedido;
     public estadoPedidoEnum estado_do_pedido; 

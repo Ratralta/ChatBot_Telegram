@@ -48,7 +48,19 @@ async Task OnError(Exception exception, HandleErrorSource source)
 async Task OnMessage(Message msg, UpdateType type)
 {
     if(msg.Text == "print") {botFunctions.PrintarTodosPedidos();}
-    await botFunctions.AskStartPedidoAsync(msg,clienteMeneger.DBpizza.sabores);
+    if(msg.Text == "printClientes") {clienteMeneger.printarClientes();}
+
+    Cliente? cliente = clienteMeneger.getClienteByChatId(msg.Chat.Id);
+
+    if(cliente == null)
+    {
+    await botFunctions.AskStartPedidoAsync(msg,clienteMeneger.DBpizza.sabores);      
+    }
+    if(cliente != null && cliente.estado_do_pedido == Cliente.estadoPedidoEnum.definindo_endereco_delivery)
+    {
+    cliente.pedido.endereco = msg.Text;
+    botFunctions.PerguntarEndereco(msg.Chat.Id);
+    }
 }
 
 // method that handle other types of updates received by the bot:
@@ -60,7 +72,7 @@ async Task OnUpdate(Update update)
 
         if(query.Data == "sim") 
         {
-            if(!clienteMeneger.hasThisChatId(query_chat_id) || clienteMeneger.clientes.Count == 0) // se NÃO tiver esse cliente ou nenhum 
+            if(!clienteMeneger.hasThisChatId(query_chat_id)) // se NÃO tiver esse cliente ou nenhum 
             {
             await botFunctions.StartPedidoAsync(query_chat_id); // inicia pedido
             await botFunctions.PeguntarItemPedidoAsync(query.Message,query_chat_id); // perguntar pedido e colocar no estado "escolhendo_item" 
@@ -69,38 +81,66 @@ async Task OnUpdate(Update update)
         }
         if(query.Data == "não")
         {
-            await bot.SendMessage(query_chat_id,"Ok");
+            if(!clienteMeneger.hasThisChatId(query_chat_id)) // se NÃO tiver esse cliente ou nenhum
+            {
+            await bot.SendMessage(query_chat_id,"Ok");                
+            }
         }
         if(botFunctions.clienteMeneger.hasThisChatId(query_chat_id)) // se existir esse cliente 
         {            
             Cliente cliente = clienteMeneger.getClienteByChatId(query_chat_id); // cliente especifico.
-            if(query.Data == "pizza")
+            if(cliente.estado_do_pedido == Cliente.estadoPedidoEnum.pedido_finalizado) {return;} // encerra codigo se o pedido tiver sido finalizado
+            if(query.Data == "pizza" && cliente.estado_do_pedido == Cliente.estadoPedidoEnum.escolhendo_item)
             {
-                if(cliente.estado_do_pedido == Cliente.estadoPedidoEnum.escolhendo_item)
-                {
                 cliente.pedido.AddPedido(new PedidoPizza(2,"Pizza"));
                 await botFunctions.PerguntarSaboresPizzaAsync(query.Message,query_chat_id);
                 return;            
-                }
             }
-            if(query.Data == "bebida")
+            if(query.Data == "bebida" && cliente.estado_do_pedido == Cliente.estadoPedidoEnum.escolhendo_item)
             {
-                if(cliente.estado_do_pedido == Cliente.estadoPedidoEnum.escolhendo_item)
-                {
                 cliente.pedido.AddPedido(new PedidoBebida(1,"Bebida"));
                 await botFunctions.PerguntarBebidasBebidaAsync(query.Message,query_chat_id);
                 return;            
-                }
             }
-            botFunctions.CheckItemPedido(query,cliente);
-            if(query.Data == "Amostrar meus pedidos")
+            
+            botFunctions.ChecarItemPedido(query,cliente); // Checa os itens do pedido 
+
+            if(query.Data == "Amostrar meus pedidos" && cliente.estado_do_pedido == Cliente.estadoPedidoEnum.escolhendo_item)
             {
                 await bot.SendMessage(query_chat_id,clienteMeneger.getClientePedidos(query_chat_id));
                 await botFunctions.PeguntarItemPedidoAsync(query.Message,query_chat_id);
             }
-            if(query.Data == "Prosseguir")
+
+            if(query.Data == "cancelar")
             {
+                await bot.SendMessage(query_chat_id,"Pedido Cancelado");
+                clienteMeneger.clientes.Remove(clienteMeneger.getClienteByChatId(query_chat_id));
+            }
+
+            if(query.Data == "prosseguir" && cliente.estado_do_pedido == Cliente.estadoPedidoEnum.escolhendo_item)
+            {
+                botFunctions.PeguntarDelivery(query_chat_id);
+            }
+
+
+            botFunctions.ChecarDeliveryOuBuscar(query,cliente); // checar delivery ou pedido
+
             
+            if(cliente.estado_do_pedido == Cliente.estadoPedidoEnum.definindo_metodo_de_pagamento)
+            {
+                Pedido.enum_tipo_de_pagamentos[] tipo_de_pagamento_array = (Pedido.enum_tipo_de_pagamentos[])Enum.GetValues(typeof(Pedido.enum_tipo_de_pagamentos));
+                for(var i=0;i<tipo_de_pagamento_array.Length;i++)
+                {
+                    if(query.Data == tipo_de_pagamento_array.GetValue(i).ToString())
+                    {
+                    cliente.estado_do_pedido = Cliente.estadoPedidoEnum.pedido_finalizado; // definindo estado pedido_finalizado 
+                    cliente.pedido.modo_de_pagamento = tipo_de_pagamento_array[i];
+                    String mensagem = "\n Pagamento realizado, obrigado pela preferencia! \n";
+                    mensagem += clienteMeneger.getAllInfoCliente(query_chat_id);
+                    bot.SendMessage(query_chat_id,mensagem);
+                    clienteMeneger.clientes.Remove(cliente);
+                    }
+                }
             }
         }
         //await bot.AnswerCallbackQuery(query.Id, $"You picked {query.Data} from {query.Id}"); // pop up na tela 
